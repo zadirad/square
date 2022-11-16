@@ -1,0 +1,47 @@
+import sys
+from PIL import Image, ImageDraw
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from math import *
+from PyQt5.QtCore import Qt
+from PyQt5 import uic
+
+
+class Example(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('ob.ui', self)
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle('')
+
+        self.image = QLabel(self)
+        self.image.move(300, 30)
+        self.image.resize(400, 400)
+        self.button.clicked.connect(self.run)
+
+    def run(self):
+        side = int(self.line.text())
+        coef = float(self.line1.text())
+        n = int(self.line2.text())
+        self.im = Image.new('RGB', (400, 400), (255, 255, 255))
+        draw = ImageDraw.Draw(self.im)
+        g = 5
+        side1 = side
+        for i in range(n):
+            side1 = side * coef
+            f = (side - side1) / 2
+            g += f
+            side =side1
+            draw.rectangle((g,g,g+side,g+side), outline=(255, 0, 0))
+        self.im.save('res.jpg')
+        self.pixmap = QPixmap('res.jpg')
+        self.image.setPixmap(self.pixmap)
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = Example()
+    ex.show()
+    sys.exit(app.exec())
